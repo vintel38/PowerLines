@@ -12,16 +12,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import scipy.signal as signal
+import os
 
-def Exists(E):
-    try: 
-        E.astype(np.float32)
-        return True
-    except ValueError:
-        return False
 
-img = cv2.imread('./images/tree.jpg')
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+#img = cv2.imread('./images/tree_edge.jpg')
+#gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 sigma=1.0
 filter_size = 2 * int(4 * sigma + 0.5) + 1 # taille du filtre en fonction du sigma recherché 
@@ -41,34 +37,48 @@ for x in range(-m, m+1):
         G2[x+m, y+n,0] = 0.9213*(2*x**2-1)*np.exp(-(x**2 + y**2))
         G2[x+m, y+n,1] = 1.843*x*y*np.exp(-(x**2 + y**2))
         G2[x+m, y+n,2] = 0.9213*(2*y**2-1)*np.exp(-(x**2 + y**2))
+        
+path = r"C:\Users\VArri\Documents\PowerLines\images\visuel"
+os.chdir(path)
+dirs = os.listdir(os.getcwd())
 
-Start=True
-#♥for theta in np.linspace(0, 2*np.pi, 100):
-for theta in [np.pi/2]:
+for dir_image in dirs:
     
-    print(theta)
-
-    kG2 = [np.cos(theta)**2, - 2*np.sin(theta)*np.cos(theta), np.sin(theta)**2]    
-    G2comb = kG2[0]*G2[:,:,0] +kG2[1]*G2[:,:,1] +kG2[2]*G2[:,:,2]
+    image_path = os.path.join(path, dir_image)
+    filename, file_extension = os.path.splitext(dir_image)
     
-    Gray_i = signal.convolve2d(gray, G2comb)
+    img = cv2.imread(image_path)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     
-    if Start:
-        E_i = np.zeros(Gray_i.shape, np.float32)
-        Start = False
+    Start=True
+    #♥for theta in np.linspace(0, 2*np.pi, 100):
+    for theta in [np.pi/2, np.pi/3, 2*np.pi/3]:
+        
+        print(theta)
     
-    E_i = np.sqrt(np.square(E_i) + np.square(Gray_i))
+        kG2 = [np.cos(theta)**2, - 2*np.sin(theta)*np.cos(theta), np.sin(theta)**2]    
+        G2comb = kG2[0]*G2[:,:,0] +kG2[1]*G2[:,:,1] +kG2[2]*G2[:,:,2]
+        
+        Gray_i = signal.convolve2d(gray, G2comb)
+        
+        if Start:
+            E_i = np.zeros(Gray_i.shape, np.float32)
+            Start = False
+        
+        E_i = np.sqrt(np.square(E_i) + np.square(Gray_i))
     
-
-    # plt.close('all')
-    # plt.figure(figsize=(22, 8))
-    # plt.subplot(121),
-    # plt.imshow(img, cmap='gray')
-    # plt.title('img'), plt.xticks([]), plt.yticks([])
-    # plt.subplot(122),
-    # plt.imshow(E_i, cmap='gray')
-    # plt.title('E_i'), plt.xticks([]), plt.yticks([])
-    # plt.show()
-    
-    plt.imshow(E_i, cmap='gray')
-    plt.show()
+        # plt.close('all')
+        # plt.figure(figsize=(22, 8))
+        # plt.subplot(121),
+        # plt.imshow(img, cmap='gray')
+        # plt.title('img'), plt.xticks([]), plt.yticks([])
+        # plt.subplot(122),
+        # plt.imshow(E_i, cmap='gray')
+        # plt.title('E_i'), plt.xticks([]), plt.yticks([])
+        # plt.show()
+        
+        #plt.imshow(E_i, cmap='gray')
+        #plt.show()
+        
+    output_dir = os.path.join(path, 'gray_steered', filename+'_steered.jpg')
+    cv2.imwrite(output_dir, E_i)
