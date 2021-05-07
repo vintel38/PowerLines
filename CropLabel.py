@@ -20,6 +20,7 @@ import os
 import cv2
 import matplotlib.pyplot as plt
 from random import randrange
+from datetime import date
 
 def RepresentsInt(s):
     try: 
@@ -28,54 +29,59 @@ def RepresentsInt(s):
     except ValueError:
         return False
 
+
+os.chdir(r"C:\Users\VArri\Documents\PowerLines\images")
 path = os.getcwd()
-image_folder = 'images'
+image_folder = 'visuel'
 image_path = os.path.join(path, image_folder)
 dirs = os.listdir(image_path)
 
-#while True:
+#import sys
+#sys.exit()
+i=5
+image_dir = os.path.join(image_path, dirs[i])
+
+k=25 # image count
+date=str(date.today())
+while True:
+
+    img = cv2.imread(image_dir)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     
-image_dir = os.path.join(image_path, 'PL3.jpg')
-img = cv2.imread(image_dir)
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-x, y = gray.shape
-side = 28
-HF = int(side/2)
-
-# crop = tf.image.random_crop(img, size = [28,28])
-
-x_crop = randrange(HF, x - HF)
-y_crop = randrange(HF, y - HF)
-
-crop = gray[x_crop-HF:x_crop+HF, y_crop-HF:y_crop+HF]
-cv2.rectangle(img, (y_crop-HF, x_crop-HF),(y_crop+HF, x_crop+HF),(255, 0, 0), 2) # !! reverse for x and y 
-
-crop_cp = crop.copy()
-cv2.rectangle(crop_cp, (HF-1, HF-1), (HF+1, HF+1), (0,0,0), 1)
-
-#crop = gray[10:50, 40:50]
-#cv2.rectangle(img, (40, 10),(50, 50),(255, 0, 0), 2)
-
-
-plt.figure()
-plt.subplot(121)
-plt.imshow(img)
-plt.subplot(122)
-plt.imshow(crop_cp, cmap='gray')
-plt.show()
-
-filename='./images/Pan2016/series/static.jpg'
-cv2.imwrite(filename, crop)
-
-
-
-label = input("Enter label (recall 0:no cable, 1:cable) : ")
-#if not isinstance(label, int):
-if not RepresentsInt(label):
-    print('change image file')
+    x, y = gray.shape
+    side = 28
+    HF = int(side/2)
     
+    # crop = tf.image.random_crop(img, size = [28,28])
+    
+    x_crop = randrange(HF, x - HF)
+    y_crop = randrange(HF, y - HF)
+    
+    crop = gray[x_crop-HF:x_crop+HF, y_crop-HF:y_crop+HF]
+    cv2.rectangle(img, (y_crop-HF, x_crop-HF),(y_crop+HF, x_crop+HF),(255, 0, 0), 20) # !! reverse for x and y 
+    
+    crop_cp = crop.copy()
+    cv2.rectangle(crop_cp, (HF-1, HF-1), (HF+1, HF+1), (0,0,0), 1)
+    plt.figure()
+    plt.subplot(121)
+    plt.imshow(img)
+    plt.subplot(122)
+    plt.imshow(crop_cp, cmap='gray')
+    plt.show()
+    
+    label = input("Enter label (recall 0:no cable, 1:cable) : ")
+    if not RepresentsInt(label):
+        print('change image file')
+        i+=1
+        image_dir = os.path.join(image_path, dirs[i])
+    else:
+        filename='./visuel/cropped/'+date+'_'+str(k)
+        k=k+1
+        cv2.imwrite(filename+'.jpg', crop)
+        f = open(filename+'.txt', "w")
+        f.write(str(label))
+        f.close()
 
 # useful documentation for the process of classification and 
 # runcell(0, 'C:/Users/VArri/Documents/GitHub/PowerLines/CropLabel.py')
