@@ -34,34 +34,19 @@ def RepresentsInt(s):
         return False
 
 
-os.chdir(r"C:\Users\VArri\Documents\PowerLines\images")
+os.chdir(r"C:\Users\VArri\Documents\PowerLines\images\visuel")
 path = os.getcwd()
-image_folder = 'visuel'
-image_path = os.path.join(path, image_folder)
+image_path = os.path.join(path, 'steered')
 dirs = os.listdir(image_path)
 
 #import sys
 #sys.exit()
-i=0 # !!!!! TO CHANGE AT EVERY ITERATION 
+i=10 # !!!!! TO CHANGE AT EVERY ITERATION 
 image_dir = os.path.join(image_path, dirs[i])
 
-k=0 # !!!!! TO CHANGE AT EVERY ITERATION 
+k=43 # !!!!! TO CHANGE AT EVERY ITERATION 
 date=str(date.today())
 
-img = cv2.imread(image_dir)
-img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-x, y = gray.shape
-side = 28
-HF = int(side/2)
-
-# crop = tf.image.random_crop(img, size = [28,28])
-
-
-#import imutils
-pts = [] # for storing points
-# :mouse callback function
 def draw_roi(event, x, y, flags, param):
     img2 = img.copy()
  
@@ -100,64 +85,65 @@ def draw_roi(event, x, y, flags, param):
             # cv2.line(img=img2, pt1=pts[i], pt2=pts[i + 1], color=(255, 0, 0), thickness=2)
  
     cv2.imshow('image', img2)
- 
- 
-#Create images and windows and bind windows to callback functions
-#img = cv2.imread('HL.jpg')
-# gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-# img = imutils.resize(img, width=500)
-cv2.namedWindow('image')
-cv2.setMouseCallback('image', draw_roi)
-print("[INFO] Click the left button: select the point, right click: delete the last selected point, click the middle button: determine the ROI area")
-print("[INFO] Press ‘S’ to determine the selection area and save it")
-print("[INFO] Press ESC to quit")
+
 
 while True:
-    key = cv2.waitKey(1) & 0xFF
-    if key == 27:
-        break
-    if key == ord("s"):
-        saved_data = pts
-        #joblib.dump(value=saved_data, filename="config.pkl")
-        #print("[INFO] ROI coordinates have been saved to local.")
-        print(saved_data)
-        break
-cv2.destroyAllWindows()
-
-print('{} points ont été trouvés dans l image'.format(pts.size))
-for point in pts:
-    print(point)
-    y_crop = point[0]
-    x_crop = point[1]
-
-    #x_crop = randrange(HF, x - HF)
-    #y_crop = randrange(HF, y - HF)
     
-    crop = gray[x_crop-HF:x_crop+HF, y_crop-HF:y_crop+HF]
-    cv2.rectangle(img, (y_crop-HF, x_crop-HF),(y_crop+HF, x_crop+HF),(255, 0, 0), 20) # !! reverse for x and y 
+    img = cv2.imread(image_dir)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     
-    crop_cp = crop.copy()
-    cv2.rectangle(crop_cp, (HF-1, HF-1), (HF+1, HF+1), (0,0,0), 1)
-    plt.figure()
-    plt.subplot(121)
-    plt.imshow(img)
-    plt.subplot(122)
-    plt.imshow(crop_cp, cmap='gray')
-    plt.show()
+    x, y = gray.shape
+    side = 28
+    HF = int(side/2)
     
-    # label = input("Enter label (recall 0:no cable, 1:cable) : ")
-    label = 1 # !!!! EACH AND EVERY POINT IS A CABLE POINT
-    if not RepresentsInt(label):
-        print('change image file')
-        i+=1
-        image_dir = os.path.join(image_path, dirs[i])
-    else:
-        filename='./visuel/cropped/'+date+'_'+str(k)
+    pts = []
+    cv2.namedWindow('image')
+    cv2.setMouseCallback('image', draw_roi)
+    print("[INFO] Click the left button: select the point, right click: delete the last selected point, click the middle button: determine the ROI area")
+    print("[INFO] Press ‘S’ to determine the selection area and save it")
+    print("[INFO] Press ESC to quit")
+    
+    while True:
+        key = cv2.waitKey(1) & 0xFF
+        if key == 27:
+            break
+        if key == ord("s"):
+            saved_data = pts
+            print(saved_data)
+            break
+    cv2.destroyAllWindows()
+    
+    print('{} points ont été trouvés dans l image'.format(len(pts)))
+    for point in pts:
+        print(point)
+        y_crop = point[0]
+        x_crop = point[1]
+    
+        #x_crop = randrange(HF, x - HF)
+        #y_crop = randrange(HF, y - HF)
+        
+        crop = gray[x_crop-HF:x_crop+HF, y_crop-HF:y_crop+HF]
+        cv2.rectangle(img, (y_crop-HF, x_crop-HF),(y_crop+HF, x_crop+HF),(255, 0, 0), 20) # !! reverse for x and y 
+        
+        crop_cp = crop.copy()
+        cv2.rectangle(crop_cp, (HF-1, HF-1), (HF+1, HF+1), (0,0,0), 1)
+        plt.figure()
+        plt.subplot(121)
+        plt.imshow(img)
+        plt.subplot(122)
+        plt.imshow(crop_cp, cmap='gray')
+        plt.show()
+        
         k=k+1
+        filename='./cropped/'+date+'_'+str(k)
         cv2.imwrite(filename+'.jpg', crop)
         f = open(filename+'.txt', "w")
-        f.write(str(label))
+        f.write(str('1'))
         f.close()
+        
+        i+=1
+        image_dir = os.path.join(image_path, dirs[i])
 
 # useful documentation for the process of classification and 
 # runcell(0, 'C:/Users/VArri/Documents/GitHub/PowerLines/CropLabel.py')

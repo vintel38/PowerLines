@@ -13,16 +13,34 @@ Simple Canny Edge Detection is also availbale but is not that useful for PLD
 """
 
 import cv2
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 # import numpy as np
+import os
 
-img = cv2.imread('./images/tree.jpg')
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-#edge = cv2.Canny(gray, 100, 200)
-blur = cv2.GaussianBlur(img,(5,5),0)
-smooth = cv2.addWeighted(img,1.5,blur,-0.5,0)
+def EdgeEnhancing(path, image_path):
+    
+    img = cv2.imread(image_path)
+    # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    
+    #edge = cv2.Canny(gray, 100, 200)
+    blur = cv2.GaussianBlur(img,(5,5),0)
+    smooth = cv2.addWeighted(img,1.5,blur,-0.5,0)
+    
+    filename, file_extension = os.path.splitext(os.path.basename(image_path))
+    output_path = os.path.join(path, 'edge', filename+'_edge.jpg')
+    cv2.imwrite(output_path, smooth)
+    
+os.chdir(r"C:\Users\VArri\Documents\PowerLines\images\visuel")
+path = os.getcwd()
+basis_dir = os.path.join(path, 'basis')
+dirs = os.listdir(basis_dir)
 
-plt.imshow(smooth, cmap='gray')
-plt.show()
-cv2.imwrite('./images/tree_edge.jpg', smooth)
+for di in dirs:
+    image_path = os.path.join(basis_dir, di)
+    
+    #print(di)
+    #print(image_path)
+    #break
+    
+    EdgeEnhancing(path, image_path)

@@ -14,12 +14,10 @@ n (Next).
 
 """
 
-#import numpy as np
-#import tensorflow as tf 
 import os 
 import cv2
 import matplotlib.pyplot as plt
-from random import randrange
+from random import randrange, random 
 from datetime import date
 
 def RepresentsInt(s):
@@ -30,10 +28,9 @@ def RepresentsInt(s):
         return False
 
 
-os.chdir(r"C:\Users\VArri\Documents\PowerLines\images")
+os.chdir(r"C:\Users\VArri\Documents\PowerLines\images\visuel")
 path = os.getcwd()
-image_folder = 'visuel'
-image_path = os.path.join(path, image_folder)
+image_path = os.path.join(path, 'steered')
 dirs = os.listdir(image_path)
 
 #import sys
@@ -41,26 +38,32 @@ dirs = os.listdir(image_path)
 i=5
 image_dir = os.path.join(image_path, dirs[i])
 
-k=25 # image count
+k=0 # image count
 date=str(date.today())
 while True:
 
-    img = cv2.imread(image_dir)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    steered = cv2.imread(image_dir, 0)
+    #steered = cv2.cvtColor(steered, cv2.COLOR_BGR2RGB)
+    #gray = cv2.cvtColor(steered, cv2.COLOR_BGR2GRAY)
     
-    x, y = gray.shape
+    # Will be easier to locate the rectangle on a color image
+    lst = dirs[i].split('_')[:-2]
+    img_dir = '_'.join(lst) + '.jpg'
+    img = cv2.imread(os.path.join(path, 'basis', img_dir), 1)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    
+    x, y = steered.shape
     side = 28
     HF = int(side/2)
-    
-    # crop = tf.image.random_crop(img, size = [28,28])
     
     x_crop = randrange(HF, x - HF)
     y_crop = randrange(HF, y - HF)
     
-    crop = gray[x_crop-HF:x_crop+HF, y_crop-HF:y_crop+HF]
+    # Display the left original color image 
     cv2.rectangle(img, (y_crop-HF, x_crop-HF),(y_crop+HF, x_crop+HF),(255, 0, 0), 20) # !! reverse for x and y 
     
+    # Display the right steered grayscale image
+    crop = steered[x_crop-HF:x_crop+HF, y_crop-HF:y_crop+HF]
     crop_cp = crop.copy()
     cv2.rectangle(crop_cp, (HF-1, HF-1), (HF+1, HF+1), (0,0,0), 1)
     plt.figure()
@@ -71,17 +74,15 @@ while True:
     plt.show()
     
     label = input("Enter label (recall 0:no cable, 1:cable) : ")
+    
     if not RepresentsInt(label):
-        print('change image file')
+        print('changes image file')
         i+=1
         image_dir = os.path.join(image_path, dirs[i])
     else:
-        filename='./visuel/cropped/'+date+'_'+str(k)
         k=k+1
+        filename='./cropped/'+date+'_'+str(k)
         cv2.imwrite(filename+'.jpg', crop)
         f = open(filename+'.txt', "w")
         f.write(str(label))
         f.close()
-
-# useful documentation for the process of classification and 
-# runcell(0, 'C:/Users/VArri/Documents/GitHub/PowerLines/CropLabel.py')
