@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 """
+Created on Fri May 14 16:39:15 2021
+
+@author: VArri
+"""
+
+# -*- coding: utf-8 -*-
+"""
 Created on Thu May  6 17:59:46 2021
 
 @author: VArri
@@ -44,7 +51,7 @@ dirs = os.listdir(image_path)
 i=10 # !!!!! TO CHANGE AT EVERY ITERATION 
 image_dir = os.path.join(image_path, dirs[i])
 
-k=237 # !!!!! TO CHANGE AT EVERY ITERATION 
+k=65 # !!!!! TO CHANGE AT EVERY ITERATION 
 date=str(date.today())
 
 def draw_roi(event, x, y, flags, param):
@@ -100,7 +107,7 @@ while True:
     pts = []
     cv2.namedWindow('image')
     cv2.setMouseCallback('image', draw_roi)
-    print("CABLE CABLE CABLE CABLE CABLE CABLE CABLE CABLE CABLE CABLE CABLE CABLE CABLE CABLE CABLE ")
+    print("NOISE NOISE NOISE NOISE NOISE NOISE NOISE NOISE NOISE NOISE NOISE NOISE NOISE NOISE ")
     print("[INFO] Click the left button: select the point, right click: delete the last selected point, click the middle button: determine the ROI area")
     print("[INFO] Press ‘S’ to determine the selection area and save it")
     print("[INFO] Press ESC to quit")
@@ -140,7 +147,7 @@ while True:
         #plt.show()
         
         k=k+1
-        filename='./cropped/1/'+date+'_'+str(k)
+        filename='./cropped/0/'+date+'_'+str(k)
         cv2.imwrite(filename+'.jpg', crop)
         #f = open(filename+'.txt', "w")
         #f.write(str('1'))

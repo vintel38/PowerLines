@@ -17,7 +17,7 @@ n (Next).
 import os 
 import cv2
 import matplotlib.pyplot as plt
-from random import randrange, random 
+from random import randrange
 from datetime import date
 
 def RepresentsInt(s):
@@ -40,27 +40,29 @@ image_dir = os.path.join(image_path, dirs[i])
 
 k=0 # image count
 date=str(date.today())
+
+steered = cv2.imread(image_dir, 0)
+#steered = cv2.cvtColor(steered, cv2.COLOR_BGR2RGB)
+#gray = cv2.cvtColor(steered, cv2.COLOR_BGR2GRAY)
+
+# Will be easier to locate the rectangle on a color image
+lst = dirs[i].split('_')[:-2]
+img_dir = '_'.join(lst) + '.jpg'
+img = cv2.imread(os.path.join(path, 'basis', img_dir), 1)
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+x, y = steered.shape
+side = 28
+HF = int(side/2)
+
 while True:
 
-    steered = cv2.imread(image_dir, 0)
-    #steered = cv2.cvtColor(steered, cv2.COLOR_BGR2RGB)
-    #gray = cv2.cvtColor(steered, cv2.COLOR_BGR2GRAY)
-    
-    # Will be easier to locate the rectangle on a color image
-    lst = dirs[i].split('_')[:-2]
-    img_dir = '_'.join(lst) + '.jpg'
-    img = cv2.imread(os.path.join(path, 'basis', img_dir), 1)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    
-    x, y = steered.shape
-    side = 28
-    HF = int(side/2)
-    
     x_crop = randrange(HF, x - HF)
     y_crop = randrange(HF, y - HF)
     
+    img_cp = img.copy()
     # Display the left original color image 
-    cv2.rectangle(img, (y_crop-HF, x_crop-HF),(y_crop+HF, x_crop+HF),(255, 0, 0), 20) # !! reverse for x and y 
+    cv2.rectangle(img_cp, (y_crop-HF, x_crop-HF),(y_crop+HF, x_crop+HF),(255, 0, 0), 20) # !! reverse for x and y 
     
     # Display the right steered grayscale image
     crop = steered[x_crop-HF:x_crop+HF, y_crop-HF:y_crop+HF]
@@ -68,7 +70,7 @@ while True:
     cv2.rectangle(crop_cp, (HF-1, HF-1), (HF+1, HF+1), (0,0,0), 1)
     plt.figure()
     plt.subplot(121)
-    plt.imshow(img)
+    plt.imshow(img_cp)
     plt.subplot(122)
     plt.imshow(crop_cp, cmap='gray')
     plt.show()
@@ -77,12 +79,27 @@ while True:
     
     if not RepresentsInt(label):
         print('changes image file')
-        i+=1
+        i=randrange(0, len(dirs)+1)
         image_dir = os.path.join(image_path, dirs[i])
+        
+        steered = cv2.imread(image_dir, 0)
+        #steered = cv2.cvtColor(steered, cv2.COLOR_BGR2RGB)
+        #gray = cv2.cvtColor(steered, cv2.COLOR_BGR2GRAY)
+        
+        # Will be easier to locate the rectangle on a color image
+        lst = dirs[i].split('_')[:-2]
+        img_dir = '_'.join(lst) + '.jpg'
+        img = cv2.imread(os.path.join(path, 'basis', img_dir), 1)
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        
+        x, y = steered.shape
+        side = 28
+        HF = int(side/2)
+        
     else:
         k=k+1
-        filename='./cropped/'+date+'_'+str(k)
-        cv2.imwrite(filename+'.jpg', crop)
-        f = open(filename+'.txt', "w")
-        f.write(str(label))
-        f.close()
+        filename='./cropped/'+ label+'/'+date+'_'+str(k)+'.jpg'
+        cv2.imwrite(filename, crop)
+        #f = open(filename+'.txt', "w")
+        #f.write(str(label))
+        #f.close()
