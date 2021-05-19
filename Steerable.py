@@ -32,7 +32,7 @@ for x in range(-m, m+1):
         
 os.chdir(r"C:\Users\VArri\Documents\PowerLines\images\visuel")
 path = os.getcwd()
-edge_dir = os.path.join(path, 'edge')
+edge_dir = os.path.join(path, 'edge1000')
 dirs = os.listdir(edge_dir)
 
 for dir_image in dirs:
@@ -50,9 +50,10 @@ for dir_image in dirs:
     
     
     Start=True
-    for theta in [np.pi/2, np.pi/3, 2*np.pi/3]:
+    #for theta in [np.pi/2, np.pi/3, 2*np.pi/3]:
+    for theta in [np.pi/2]:
         
-        print(theta)
+        #print(theta)
     
         kG2 = [np.cos(theta)**2, - 2*np.sin(theta)*np.cos(theta), np.sin(theta)**2]    
         G2comb = kG2[0]*G2[:,:,0] +kG2[1]*G2[:,:,1] +kG2[2]*G2[:,:,2]
@@ -65,6 +66,6 @@ for dir_image in dirs:
         
         E_i = np.sqrt(np.square(E_i) + np.square(Gray_i))
     
-    output_dir = os.path.join(path,'steered', filename+'_steered.jpg')
+    output_dir = os.path.join(path,'steered1000', filename+'_steered.jpg')
     cv2.imwrite(output_dir, E_i)
     # break

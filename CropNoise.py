@@ -31,7 +31,7 @@ def RepresentsInt(s):
 
 os.chdir(r"C:\Users\VArri\Documents\PowerLines\images\visuel")
 path = os.getcwd()
-image_path = os.path.join(path, 'steered')
+image_path = os.path.join(path, 'steered1000')
 dirs = os.listdir(image_path)
 
 i=randrange(0,len(dirs)+1) # !!!!! TO CHANGE AT EVERY ITERATION 
@@ -118,8 +118,8 @@ while True:
         crop = img[x_crop-HF:x_crop+HF, y_crop-HF:y_crop+HF,:]
 
         k=k+1
-        #filename='./cropped/0/'+date+'_'+str(k)
-        filename='./cropped_test/valid_0/'+date+'_'+str(k)
+        #filename='./cropped1000/0/'+date+'_'+str(k)
+        filename='./cropped_test1000/valid_0/'+date+'_'+str(k)
         cv2.imwrite(filename+'.jpeg', crop)
         
     i=randrange(0,len(dirs)+1)

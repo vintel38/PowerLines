@@ -23,12 +23,14 @@ def EdgeEnhancing(path, image_path):
     img = cv2.imread(image_path)
     # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     
+    img = cv2.resize(img, dsize = (int(img.shape[1]*0.25), int(img.shape[0]*0.25)))
+    
     #edge = cv2.Canny(gray, 100, 200)
     blur = cv2.GaussianBlur(img,(5,5),0)
     smooth = cv2.addWeighted(img,1.5,blur,-0.5,0)
     
     filename, file_extension = os.path.splitext(os.path.basename(image_path))
-    output_path = os.path.join(path, 'edge', filename+'_edge.jpg')
+    output_path = os.path.join(path, 'edge1000', filename+'_edge.jpg')
     cv2.imwrite(output_path, smooth)
     
 os.chdir(r"C:\Users\VArri\Documents\PowerLines\images\visuel")
