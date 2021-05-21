@@ -28,6 +28,7 @@ def EdgeEnhancing(path, image_path):
     #edge = cv2.Canny(gray, 100, 200)
     blur = cv2.GaussianBlur(img,(5,5),0)
     smooth = cv2.addWeighted(img,1.5,blur,-0.5,0)
+    # https://stackoverflow.com/questions/4993082/how-can-i-sharpen-an-image-in-opencv
     
     filename, file_extension = os.path.splitext(os.path.basename(image_path))
     output_path = os.path.join(path, 'edge1000', filename+'_edge.jpg')
