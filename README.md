@@ -35,9 +35,9 @@ Une fois que les arêtes verticales ont été extraites de l'image, on peut comm
 
 Pixels Câble            |  Pixels non-Câble
 :-------------------------:|:-------------------------:
-<img src="https://github.com/vintel38/PowerLines/blob/main/images/1%20(1).jpeg" width="300" /> | <img src="https://github.com/vintel38/PowerLines/blob/main/images/0%20(1).jpeg"  width="300" />
-<img src="https://github.com/vintel38/PowerLines/blob/main/images/1%20(2).jpeg" width="300" /> | <img src="https://github.com/vintel38/PowerLines/blob/main/images/0%20(2).jpeg"  width="300" />
-<img src="https://github.com/vintel38/PowerLines/blob/main/images/1%20(3).jpeg"  width="300" /> | <img src="https://github.com/vintel38/PowerLines/blob/main/images/0%20(4).jpeg"  width="300" />
+<img src="https://github.com/vintel38/PowerLines/blob/main/images/1%20(1).jpeg" width="100" /> | <img src="https://github.com/vintel38/PowerLines/blob/main/images/0%20(1).jpeg"  width="100" />
+<img src="https://github.com/vintel38/PowerLines/blob/main/images/1%20(2).jpeg" width="100" /> | <img src="https://github.com/vintel38/PowerLines/blob/main/images/0%20(2).jpeg"  width="100" />
+<img src="https://github.com/vintel38/PowerLines/blob/main/images/1%20(3).jpeg"  width="100" /> | <img src="https://github.com/vintel38/PowerLines/blob/main/images/0%20(4).jpeg"  width="100" />
 
 ## IV ) Reconstruction des lignes
 
