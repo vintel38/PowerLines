@@ -48,4 +48,10 @@ Image Initiale            |  Image Détectée
 <img src="https://github.com/vintel38/PowerLines/blob/main/images/20210507_133045_001_edge.jpg" width="300" /> | <img src="https://github.com/vintel38/PowerLines/blob/main/images/20210507_133045_001_dyn.jpg"  width="300" />
 
 
-VA 20/05/2021
+## V ) Résultat sur une séquence d'images
+
+Tout le processus décrit précédemment ce qui est appliqué à chaque image en provenance de la caméra. On obtient alors la séquence d'images post-traitées suivante. On peut bien distinguer la caténaire qui est efficacement détectée par l'IA de PLD. La technique fonctionne de manière satisfaisante ce qui valide bien la reproductibilité de l'article Pan et al. 
+
+<img src="https://github.com/vintel38/PowerLines/blob/main/images/PLD_gif.gif" width="300" />
+
+VA 20/05/2021 (modifié le 04/06/2021)
